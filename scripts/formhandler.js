@@ -10,6 +10,9 @@
     if (this.$formElement.length === 0) {
       throw new Error('Could not find element with selector')
     }
+    this.$formElement.on('reset',function(event){
+      this.elements[0].focus();
+    })
   }
   FormHandler.prototype.addSubmitHandler = function(fn){
     this.$formElement.on('submit',function(event){
@@ -24,6 +27,17 @@
       this.reset();
       this.elements[0].focus();
     });
+  }
+  FormHandler.prototype.addInputHandler = function(fn){
+    this.$formElement.on('input','[name="emailAddress"]',function(event){
+      var emailAddress = event.target.value;
+      if(fn(emailAddress)){
+        event.target.setCustomValidity('');
+      }
+    if(!fn(emailAddress)){
+      event.target.setCustomValidity('your emailAddress is not an authorized emailAddress');
+    };
+    })
   }
   APP.FormHandler = FormHandler;
   window.APP = APP;
