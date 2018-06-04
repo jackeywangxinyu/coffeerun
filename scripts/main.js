@@ -18,11 +18,16 @@
   window.myTruck = myTruck;
   var formhandler = new FormHandler(FROM_SELECTOR);
   formhandler.addSubmitHandler(function(data){
-    myTruck.createOrder.call(myTruck,data);
-    checklist.addRow.call(checklist,data);
+    return myTruck.createOrder.call(myTruck,data)
+      .then(function(){
+        checklist.addRow.call(checklist,data);
+      })
   });
   formhandler.addInputHandler(Validation.isCompanyEmail);
 
+  myTruck.printOrders(checklist.addRow.bind(checklist));
   checklist.addClickHandler(myTruck.deliverOrder.bind(myTruck));
+
+
 
 })(window);

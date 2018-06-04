@@ -7,17 +7,24 @@
   };
 
   Truck.prototype.createOrder = function(order){
-    this.db.add(order.emailAddress,order);
+    return this.db.add(order.emailAddress,order);
   };
 
   Truck.prototype.deliverOrder= function(customerId){
-    this.db.remove(customerId);
+    return this.db.remove(customerId);
   }
-  Truck.prototype.printOrders = function(){
-    var customerIdArray = Object.keys(this.db.getAll());
-    customerIdArray.forEach(function(id){
-      console.log(this.db.get(id));
+  Truck.prototype.printOrders = function(printFn){
+    return this.db.getAll()
+    .then(function(orders){
+      var customerIdArray = Object.keys(orders);
+      customerIdArray.forEach(function(id){
+        console.log(orders[id]);
+        if(printFn){
+          printFn(orders[id]);
+        }
+      }.bind(this));
     }.bind(this));
+
   };
   APP.Truck = Truck;
   window.APP = APP;
